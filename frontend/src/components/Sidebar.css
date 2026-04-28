@@ -1,0 +1,73 @@
+/* components/Sidebar.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap');
+
+.sb-root {
+  width: 220px;
+  min-height: 100vh;
+  background: #C4B5FD;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  flex-shrink: 0;
+}
+
+.sb-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  padding: 0 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-logo-text { color: #4C1D95; }
+
+.sb-nav {
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sb-nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(76,29,149,0.6);
+  padding: 0 12px;
+  margin-bottom: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.sb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+.sb-item:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+.sb-item--active {
+  background: white;
+  color: #7C3AED;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.15);
+}
+
+.sb-item-icon { font-size: 16px; }
+.sb-item-label { flex: 1; }

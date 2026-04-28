@@ -1,0 +1,137 @@
+/* HomePage.css */
+
+.hp-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #f9fafb; /* Light clean grey-white */
+  font-family: 'Inter', sans-serif;
+}
+
+.hp-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 1. TOP HEADER & PROFILE SECTION */
+.hp-header {
+  background: white;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between; /* This spreads Logo to Left and Profile to Right */
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.hp-profile-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 15px;
+  border-radius: 50px;
+  background: #f3f4f6;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hp-profile-box:hover {
+  background: #ede9fe;
+}
+
+.hp-user-name {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.hp-avatar {
+  width: 35px;
+  height: 35px;
+  background: #7c3aed;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* 2. SCROLLABLE BODY */
+.hp-scroll-area {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* 3. HERO SECTION (The Purple Ombre) */
+.hp-hero {
+  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 50px;
+  color: white;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hp-hero-text h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.hp-hero-text p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* 4. FEATURE GRID */
+.hp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.hp-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.hp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05);
+  border-color: #7c3aed;
+}
+
+.hp-card-icon {
+  font-size: 30px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.hp-card h3 {
+  font-size: 20px;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.hp-card p {
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hp-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+}
