@@ -155,3 +155,26 @@
 }
 
 .detail-add-btn { flex: 1; min-width: 160px; }
+
+
+
+.detail-shop-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--plum-pale);
+  color: var(--plum);
+  border: 1px solid var(--plum-soft);
+  border-radius: var(--r-full);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: all 0.18s;
+}
+
+.detail-shop-badge:hover {
+  background: var(--plum);
+  color: white;
+}

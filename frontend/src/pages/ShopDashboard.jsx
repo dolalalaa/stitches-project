@@ -45,7 +45,8 @@ export default function ShopDashboard() {
     const stored = localStorage.getItem('stitches_user')
     if (!stored) { navigate('/login'); return }
     const parsed = JSON.parse(stored)
-    if (parsed.role !== 'shopOwner') { navigate('/'); return }
+    if (parsed.role !== 'shopOwner' && parsed.role !== 'shopkeeper') {navigate('/home') 
+      return}
     setUser(parsed)
   }, [navigate])
 
@@ -55,8 +56,8 @@ export default function ShopDashboard() {
     async function load() {
       try {
         const [oRes, pRes] = await Promise.all([
-          fetch(`${API}/dashboard/orders`),
-          fetch(`${API}/dashboard/products`),
+          fetch(`${API}/dashboard/orders?userId=${user._id}`),
+          fetch(`${API}/dashboard/products?userId=${user._id}`),
         ])
         const oData = await oRes.json()
         const pData = await pRes.json()
@@ -139,7 +140,7 @@ export default function ShopDashboard() {
     try {
       const res  = await fetch(`${API}/dashboard/products`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProduct),
+        body: JSON.stringify({ ...newProduct, userId: user._id }),
       })
       const data = await res.json()
       if (data.success) {

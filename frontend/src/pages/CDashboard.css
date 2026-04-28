@@ -1,0 +1,155 @@
+/* Layout Organization */
+.hp-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #F3F4F6;
+  overflow: hidden;
+}
+
+.hp-main-content {
+  flex: 1; /* This fills the space next to your 220px Sidebar */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+.hp-header {
+  background: white;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.hp-user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.hp-welcome { color: #4B5563; font-size: 14px; }
+.hp-avatar-circle {
+  width: 38px;
+  height: 38px;
+  background: #EDE9FE;
+  border-radius: 50%;
+  padding: 8px;
+  color: #7C3AED;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.hp-avatar-circle:hover { transform: scale(1.1); }
+
+/* Scrollable Body */
+.hp-scroll-body {
+  padding: 30px 40px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Welcome Hero Card */
+.hp-welcome-card {
+  background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+  border-radius: 20px;
+  padding: 40px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.2);
+}
+
+.hp-welcome-text h1 { font-size: 32px; margin-bottom: 10px; }
+.text-purple { color: #DDD6FE; }
+.hp-cta-btn {
+  margin-top: 20px;
+  background: white;
+  color: #7C3AED;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hp-hero-icon { font-size: 60px; opacity: 0.8; }
+
+/* Grid for Measurements and Orders */
+.hp-data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.hp-data-card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid #E5E7EB;
+}
+
+.hp-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.hp-card-title h3 { font-size: 18px; color: #1F2937; margin: 0; }
+.hp-edit-link {
+  background: none;
+  border: none;
+  color: #7C3AED;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Measurements Styling */
+.hp-m-list { display: flex; flex-direction: column; gap: 12px; }
+.hp-m-row {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #F3F4F6;
+  color: #4B5563;
+}
+.hp-m-row strong { color: #7C3AED; }
+
+/* Order History Styling */
+.hp-order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.hp-order-number { display: block; font-weight: 600; color: #111827; }
+.hp-order-date { font-size: 12px; color: #9CA3AF; }
+.hp-order-side { text-align: right; }
+.hp-order-price { display: block; font-weight: 700; color: #1F2937; font-size: 14px; }
+
+.hp-status-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.hp-status-tag.delivered { background: #D1FAE5; color: #065F46; }
+.hp-status-tag.in-progress { background: #FEF3C7; color: #92400E; }
+
+.hp-no-data {
+  text-align: center;
+  color: #9CA3AF;
+  padding: 20px;
+  font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .hp-data-grid { grid-template-columns: 1fr; }
+}

@@ -4,14 +4,21 @@ import './CartPage.css'
 
 const API = 'http://localhost:1206'
 
+function getUserId() {
+  try {
+    const u = JSON.parse(localStorage.getItem('stitches_user'))
+    return u?._id || 'guest'
+  } catch { return 'guest' }
+}
+
 export default function CartPage() {
   const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
-  const [totalAmount, setTotalAmount] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [placingOrder, setPlacingOrder] = useState(false)
-  const [toast, setToast] = useState(null)
+  const [cartItems, setCartItems]   = useState([])
+  const [totalAmount, setTotal]     = useState(0)
+  const [loading, setLoading]       = useState(true)
+  const [error, setError]           = useState(null)
+  const [placingOrder, setPlacing]  = useState(false)
+  const [toast, setToast]           = useState(null)
 
   function showToast(msg, type = 'success') {
     setToast({ msg, type })
@@ -19,10 +26,11 @@ export default function CartPage() {
   }
 
   useEffect(() => {
-    fetch(`${API}/cart`)
+    const uid = getUserId()
+    fetch(`${API}/cart?userId=${uid}`)
       .then(r => r.json())
       .then(data => {
-        if (data.success) { setCartItems(data.cartItems); setTotalAmount(data.totalAmount) }
+        if (data.success) { setCartItems(data.cartItems); setTotal(data.totalAmount) }
         else setError('Could not load cart.')
         setLoading(false)
       })
@@ -30,29 +38,32 @@ export default function CartPage() {
   }, [])
 
   async function handleRemove(productId) {
+    const uid = getUserId()
     try {
-      const res = await fetch(`${API}/cart/remove/${productId}`, { method: 'DELETE' })
+      const res  = await fetch(`${API}/cart/remove/${productId}?userId=${uid}`, { method: 'DELETE' })
       const data = await res.json()
       if (data.success) {
         setCartItems(data.cartItems)
-        setTotalAmount(data.totalAmount)
-        showToast('Item removed from cart')
+        setTotal(data.totalAmount)
+        showToast('Item removed')
       } else showToast(data.message || 'Could not remove.', 'error')
     } catch { showToast('Could not connect to server.', 'error') }
   }
 
   async function handlePlaceOrder() {
-    setPlacingOrder(true)
+    setPlacing(true)
+    const uid = getUserId()
     try {
-      const res = await fetch(`${API}/order/place`, {
-        method: 'POST',
+      const res  = await fetch(`${API}/order/place`, {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid }),
       })
       const data = await res.json()
       if (data.success) navigate('/order/success')
       else showToast(data.message || 'Could not place order.', 'error')
     } catch { showToast('Could not connect to server.', 'error') }
-    setPlacingOrder(false)
+    setPlacing(false)
   }
 
   if (loading) return (
@@ -77,7 +88,6 @@ export default function CartPage() {
         </div>
       ) : (
         <div className="cart-layout">
-          {/* Items list */}
           <div className="cart-items-col">
             {cartItems.map(item => (
               <div key={item.productId} className="cart-row">
@@ -93,27 +103,18 @@ export default function CartPage() {
                 <div className="cart-row-qty">Qty: {item.quantity}×</div>
                 <div className="cart-row-right">
                   <p className="cart-row-total">{item.totalPrice.toLocaleString()} BDT</p>
-                  <button
-                    className="cart-row-remove"
-                    onClick={() => handleRemove(item.productId)}
-                    title="Remove"
-                  >✕</button>
+                  <button className="cart-row-remove" onClick={() => handleRemove(item.productId)} title="Remove">✕</button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Summary */}
           <div className="cart-summary">
             <div className="cart-total-row">
               <span>Total</span>
               <span className="cart-total-amount">{totalAmount.toLocaleString()} BDT</span>
             </div>
-            <button
-              className="btn btn-dark btn-lg cart-place-btn"
-              onClick={handlePlaceOrder}
-              disabled={placingOrder}
-            >
+            <button className="btn btn-dark btn-lg cart-place-btn" onClick={handlePlaceOrder} disabled={placingOrder}>
               {placingOrder ? 'Placing Order...' : 'Place Order'}
             </button>
             <Link to="/" className="cart-continue-link">← Continue Shopping</Link>
@@ -123,9 +124,7 @@ export default function CartPage() {
 
       {toast && (
         <div className="toast-wrap">
-          <div className={`toast ${toast.type}`}>
-            {toast.type === 'error' ? '✕' : '✓'} {toast.msg}
-          </div>
+          <div className={`toast ${toast.type}`}>{toast.type === 'error' ? '✕' : '✓'} {toast.msg}</div>
         </div>
       )}
     </div>

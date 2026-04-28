@@ -28,7 +28,10 @@ export default function ShopProfile() {
     const stored = localStorage.getItem('stitches_user')
     if (!stored) { navigate('/login'); return }
     const parsed = JSON.parse(stored)
-    if (parsed.role !== 'shopOwner') { navigate('/'); return }
+    if (parsed.role !== 'shopOwner' && parsed.role !== 'shopkeeper') {
+      navigate('/home')
+      return
+    }
     setUser(parsed)
   }, [navigate])
 

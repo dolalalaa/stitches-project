@@ -8,45 +8,41 @@ const Shop    = require("../models/Shop");
 //  SHOP OWNER — PROFILE
 // ════════════════════════════════════════════════════════════════
 
-// GET profile by userId
 router.get("/profile/:userId", async (req, res) => {
   try {
     const shop = await Shop.findOne({ userId: req.params.userId });
-    if (!shop) {
-      return res.json({ success: false, message: "Profile not found" });
-    }
+    if (!shop) return res.json({ success: false, message: "Profile not found" });
     res.json({ success: true, shop });
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 });
 
-// POST create profile (first time shop owner logs in)
 router.post("/profile", async (req, res) => {
   try {
     const { userId, shopName, ownerName, email, phone, address, profilePicture } = req.body;
-    if (!userId || !ownerName || !email) {
+    if (!userId || !ownerName || !email)
       return res.status(400).json({ success: false, message: "userId, ownerName and email are required" });
-    }
-    // check if already exists
+
     const existing = await Shop.findOne({ userId });
-    if (existing) {
-      return res.json({ success: true, shop: existing, message: "Profile already exists" });
-    }
-    const shop = new Shop({ userId, shopName: shopName || ownerName + "'s Shop", ownerName, email, phone: phone || "", address: address || "", profilePicture: profilePicture || "" });
+    if (existing) return res.json({ success: true, shop: existing, message: "Profile already exists" });
+
+    const shop = new Shop({
+      userId, shopName: shopName || ownerName + "'s Shop",
+      ownerName, email, phone: phone || "", address: address || "", profilePicture: profilePicture || ""
+    });
     await shop.save();
     res.json({ success: true, shop });
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 });
 
-// PATCH update profile
 router.patch("/profile/:userId", async (req, res) => {
   try {
     const { shopName, ownerName, phone, address, profilePicture } = req.body;
     const updates = {};
-    if (shopName        !== undefined) updates.shopName        = shopName;
-    if (ownerName       !== undefined) updates.ownerName       = ownerName;
-    if (phone           !== undefined) updates.phone           = phone;
-    if (address         !== undefined) updates.address         = address;
-    if (profilePicture  !== undefined) updates.profilePicture  = profilePicture;
+    if (shopName       !== undefined) updates.shopName       = shopName;
+    if (ownerName      !== undefined) updates.ownerName      = ownerName;
+    if (phone          !== undefined) updates.phone          = phone;
+    if (address        !== undefined) updates.address        = address;
+    if (profilePicture !== undefined) updates.profilePicture = profilePicture;
 
     const shop = await Shop.findOneAndUpdate({ userId: req.params.userId }, updates, { new: true });
     if (!shop) return res.status(404).json({ success: false, message: "Profile not found" });
@@ -55,12 +51,15 @@ router.patch("/profile/:userId", async (req, res) => {
 });
 
 // ════════════════════════════════════════════════════════════════
-//  SHOP OWNER — ORDERS
+//  SHOP OWNER — ORDERS (filtered by shopId)
 // ════════════════════════════════════════════════════════════════
 
+// GET /dashboard/orders?userId=xxx
 router.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const { userId } = req.query;
+    const query = userId ? { shopId: userId } : {};
+    const orders = await Order.find(query).sort({ createdAt: -1 });
     res.json({ success: true, orders });
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 });
@@ -78,12 +77,15 @@ router.patch("/orders/:id/status", async (req, res) => {
 });
 
 // ════════════════════════════════════════════════════════════════
-//  SHOP OWNER — PRODUCTS
+//  SHOP OWNER — PRODUCTS (filtered by shopId)
 // ════════════════════════════════════════════════════════════════
 
+// GET /dashboard/products?userId=xxx
 router.get("/products", async (req, res) => {
   try {
-    const products = await Product.find().sort({ name: 1 });
+    const { userId } = req.query;
+    const query = userId ? { shopId: userId } : {};
+    const products = await Product.find(query).sort({ name: 1 });
     res.json({ success: true, products });
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 });
@@ -103,15 +105,19 @@ router.patch("/products/:id", async (req, res) => {
   } catch (e) { res.status(500).json({ success: false, error: e.message }); }
 });
 
+// POST /dashboard/products — automatically assigns shopId from userId
 router.post("/products", async (req, res) => {
   try {
-    const { name, type, stock, price, image } = req.body;
+    const { name, type, stock, price, image, userId } = req.body;
     if (!name || !price || !stock)
       return res.status(400).json({ success: false, message: "name, price and stock are required" });
+
+    // Use userId directly as shopId — no Shop profile lookup needed
     const product = new Product({
       name, type: type || "General",
       stock: Number(stock), price: Number(price),
       currency: "BDT", image: image || "",
+      shopId: userId || "",
     });
     await product.save();
     res.json({ success: true, product });
@@ -127,7 +133,22 @@ router.delete("/products/:id", async (req, res) => {
 });
 
 // ════════════════════════════════════════════════════════════════
-//  ADMIN — SHOPS (kept for future use)
+//  PUBLIC — SHOP PAGE
+//  GET /dashboard/shop/:shopId  — public, for customers
+// ════════════════════════════════════════════════════════════════
+
+router.get("/shop/:shopId", async (req, res) => {
+  try {
+    const shop = await Shop.findOne({ userId: req.params.shopId });
+    if (!shop) return res.status(404).json({ success: false, message: "Shop not found" });
+
+    const products = await Product.find({ shopId: req.params.shopId });
+    res.json({ success: true, shop, products });
+  } catch (e) { res.status(500).json({ success: false, error: e.message }); }
+});
+
+// ════════════════════════════════════════════════════════════════
+//  ADMIN — SHOPS
 // ════════════════════════════════════════════════════════════════
 
 router.get("/shops", async (req, res) => {

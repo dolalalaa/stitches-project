@@ -1,3 +1,19 @@
+# Terminal 1 — Kaspia's backend
+cd backend && node server.js
+# ✅ port 5000
+
+# Terminal 2 — Your backend  
+cd backend && node index.js
+# ✅ port 1206
+
+# Terminal 3 — Frontend
+cd frontend && npm run dev
+# ✅ port 5173
+
+# Terminal 4 — Mannequin
+cd mannequin-service && source venv/bin/activate && python app.py
+# ✅ port 5001
+
 run backend:
 cd stitches-project/stitches-backend
 npm install

@@ -14,19 +14,16 @@ import OrderSuccessPage   from './pages/OrderSuccessPage.jsx'
 // ── Module 3: Nishat ──
 import ShopDashboard      from './pages/ShopDashboard.jsx'
 import ShopProfile        from './pages/ShopProfile.jsx'
+import ShopPage           from './pages/ShopPage.jsx'
 
-// ── Teammates (uncomment when ready to merge) ──
-// import MeasurementPage    from './pages/MeasurementPage.jsx'    // Kaspia M1
-// import DressCustomPage    from './pages/DressCustomPage.jsx'    // Tasnim M1
-// import DraftPage          from './pages/DraftPage.jsx'          // Junayed M1
-// import PaymentPage        from './pages/PaymentPage.jsx'        // Kaspia M2
-// import FabricPage         from './pages/FabricPage.jsx'         // Tasnim M2
-// import OrderTrackPage     from './pages/OrderTrackPage.jsx'     // Junayed M2
-// import ChatPage           from './pages/ChatPage.jsx'           // Kaspia M3
-// import CustomerDashboard  from './pages/CustomerDashboard.jsx'  // Kaspia M3
-// import ReviewPage         from './pages/ReviewPage.jsx'         // Tasnim M3
-// import MagazinePage       from './pages/MagazinePage.jsx'       // Tasnim M3
-// import PricePage          from './pages/PricePage.jsx'          // Junayed M3
+import LoginPage      from './pages/LoginPage'
+import RegisterPage   from './pages/RegisterPage'
+import CDashboard     from './pages/CDashboard'
+import MeasurementForm from './pages/MeasurementForm'
+import CheckoutPage   from './pages/CheckoutPage'
+import ProfilePage    from './pages/ProfilePage'
+import ChatPage       from './pages/ChatPage'
+import ShopChatPage   from './pages/ShopChatPage'
 
 export default function App() {
   return (
@@ -46,18 +43,17 @@ export default function App() {
         {/* ── Module 3: Nishat ── */}
         <Route path="/shop-dashboard"  element={<ShopDashboard />} />
         <Route path="/shop-profile"    element={<ShopProfile />} />
+        <Route path="/shop/:shopId" element={<ShopPage />} />
 
-        {/* ── Teammates — uncomment when merging ── */}
-        {/* <Route path="/measure"          element={<MeasurementPage />} /> */}
-        {/* <Route path="/customize"        element={<DressCustomPage />} /> */}
-        {/* <Route path="/draft"            element={<DraftPage />} /> */}
-        {/* <Route path="/payment"          element={<PaymentPage />} /> */}
-        {/* <Route path="/fabrics"          element={<FabricPage />} /> */}
-        {/* <Route path="/order/track/:id"  element={<OrderTrackPage />} /> */}
-        {/* <Route path="/chats"            element={<ChatPage />} /> */}
-        {/* <Route path="/dashboard"        element={<CustomerDashboard />} /> */}
-        {/* <Route path="/reviews"          element={<ReviewPage />} /> */}
-        {/* <Route path="/magazine"         element={<MagazinePage />} /> */}
+        {/* ── Kashpia  */}
+        <Route path="/login"        element={<LoginPage />} />  
+        <Route path="/register"     element={<RegisterPage />} />
+        <Route path="/c-dashboard"  element={<CDashboard />} />
+        <Route path="/measurements" element={<MeasurementForm />} />
+        <Route path="/payment"      element={<CheckoutPage />} />
+        <Route path="/profile"      element={<ProfilePage />} />
+        <Route path="/chat"         element={<ChatPage />} />
+        <Route path="/shop-chat"    element={<ShopChatPage />} />
       </Routes>
     </BrowserRouter>
   )
