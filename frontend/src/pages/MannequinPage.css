@@ -1,0 +1,158 @@
+.mannequin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 40px;
+}
+
+/* Header */
+.mannequin-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--stone);
+}
+
+.mannequin-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 30px;
+  color: var(--plum);
+  margin-bottom: 6px;
+}
+
+.mannequin-subtitle {
+  font-size: 14px;
+  color: var(--ink-light);
+}
+
+/* Two-column layout */
+.mannequin-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .mannequin-layout { grid-template-columns: 1fr; }
+}
+
+/* 3D canvas */
+.mannequin-viewer-col {} 
+
+.mannequin-canvas-wrap {
+  width: 100%;
+  height: 520px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--stone);
+  background: var(--plum-tint);
+  position: relative;
+}
+
+.mannequin-canvas-wrap canvas {
+  display: block;
+}
+
+/* Placeholder overlay */
+.mannequin-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--plum-tint);
+  pointer-events: none;
+}
+
+.mannequin-placeholder.error {
+  background: #fff5f5;
+}
+
+.mannequin-placeholder p {
+  font-size: 14px;
+  color: var(--ink-light);
+  text-align: center;
+  max-width: 240px;
+}
+
+.mannequin-placeholder.error p {
+  color: var(--danger);
+}
+
+.mannequin-placeholder-icon {
+  font-size: 52px;
+  opacity: 0.35;
+}
+
+.mannequin-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+}
+
+/* Right column */
+.mannequin-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 88px;
+}
+
+/* Measurements card */
+.mannequin-measurements-card {
+  background: var(--ivory);
+  border: 1px solid var(--stone);
+  border-radius: var(--r-lg);
+  padding: 20px;
+}
+
+.mannequin-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--stone);
+}
+
+.mannequin-measurements {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.measurement-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.measurement-row span:first-child {
+  color: var(--ink-light);
+}
+
+.measurement-row span:last-child {
+  font-weight: 600;
+  color: var(--plum);
+  background: var(--plum-pale);
+  padding: 3px 12px;
+  border-radius: var(--r-full);
+  font-size: 13px;
+}
+
+/* Buttons */
+.mannequin-btn {
+  width: 100%;
+}
+
+.mannequin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
