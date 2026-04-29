@@ -1,0 +1,128 @@
+.cup-page {
+  min-height: 100vh;
+  background: #f5f4f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.cup-loading, .cup-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #888;
+}
+
+.cup-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e0d6f0;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.cup-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.cup-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cup-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0d6f0;
+}
+
+.cup-avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f0ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e0d6f0;
+}
+
+.cup-avatar-placeholder svg {
+  width: 48px;
+  height: 48px;
+  color: #7c3aed;
+}
+
+.cup-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.cup-email {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.cup-fields {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cup-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f7ff;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.cup-field-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+}
+
+.cup-field-value {
+  font-size: 14px;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.cup-chat-btn {
+  width: 100%;
+  padding: 14px;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cup-chat-btn:hover { background: #6d28d9; }

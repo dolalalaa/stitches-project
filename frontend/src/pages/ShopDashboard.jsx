@@ -191,7 +191,7 @@ export default function ShopDashboard() {
           </div>
           <div className="dash-quick-btns">
             <Link to="/shop-profile" className="dash-quick-btn">👤 My Profile</Link>
-            <Link to="/chats" className="dash-quick-btn chat">💬 Chats</Link>
+            <Link to="/shop-chat" className="dash-quick-btn chat">💬 Chats</Link>
           </div>
         </div>
       </div>

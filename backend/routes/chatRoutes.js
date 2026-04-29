@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Message");
-
+const Profile = require("../models/Profile");
 // GET messages for a room
 router.get("/:room", async (req, res) => {
   try {
@@ -40,9 +40,14 @@ router.get("/rooms/:shopName", async (req, res) => {
       room: new RegExp(`_${shopName}$`)
     }).distinct("room");
 
-    const customers = rooms.map((room) => ({
-      id:   room,
-      name: room.replace(`_${shopName}`, ""),
+    const customers = await Promise.all(rooms.map(async (room) => {
+      const name = room.replace(`_${shopName}`, "");
+      const profile = await Profile.findOne({ name });
+      return {
+        id:         room,
+        name:       name,
+        customerId: profile ? profile.userId : null,
+      };
     }));
 
     res.json({ success: true, customers });

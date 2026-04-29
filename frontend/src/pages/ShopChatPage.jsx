@@ -1,28 +1,48 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 import "./ChatPage.css";
 
 const socket = io("http://localhost:5000");
 
 const ShopChatPage = () => {
-  const stored  = localStorage.getItem("stitches_user");
+  const stored   = localStorage.getItem("stitches_user");
   const shopUser = stored ? JSON.parse(stored) : {};
   const shopName = shopUser.name || "Shopkeeper";
+  const navigate = useNavigate();
 
-  const [customers, setCustomers]     = useState([]);
+  const [customers, setCustomers]       = useState([]);
   const [selectedCust, setSelectedCust] = useState(null);
-  const [messages, setMessages]       = useState([]);
-  const [input, setInput]             = useState("");
-  const messagesEndRef                = useRef(null);
+  const [messages, setMessages]         = useState([]);
+  const [input, setInput]               = useState("");
+  const messagesEndRef                  = useRef(null);
 
-  // Fetch all users who have chatted with this shop from DB
+  // Read ?customer= from URL
+  const params      = new URLSearchParams(window.location.search);
+  const preSelected = params.get("customer");
+
   useEffect(() => {
     fetch("http://localhost:5000/api/chat/rooms/" + shopName)
       .then((r) => r.json())
       .then((data) => {
         if (data.success && data.customers?.length > 0) {
-          setCustomers(data.customers);
-          setSelectedCust(data.customers[0]);
+          let custs = data.customers;
+
+          // If coming from customer profile, add customer if not in list
+          if (preSelected) {
+            const exists = custs.find(c => c.name === preSelected);
+            if (!exists) custs = [{ id: preSelected, name: preSelected }, ...custs];
+            const target = custs.find(c => c.name === preSelected);
+            setSelectedCust(target);
+          } else {
+            setSelectedCust(custs[0]);
+          }
+
+          setCustomers(custs);
+        } else if (preSelected) {
+          const newCust = { id: preSelected, name: preSelected };
+          setCustomers([newCust]);
+          setSelectedCust(newCust);
         }
       })
       .catch(() => {});
@@ -31,8 +51,12 @@ const ShopChatPage = () => {
   useEffect(() => {
     if (!selectedCust) return;
     const room = `${selectedCust.name}_${shopName}`;
+
     socket.emit("join_room", room);
     socket.emit("load_messages", room);
+
+    socket.off("receive_message");
+    socket.off("message_history");
 
     socket.on("receive_message", (msg) => setMessages((prev) => [...prev, msg]));
     socket.on("message_history", (history) => setMessages(history));
@@ -88,7 +112,17 @@ const ShopChatPage = () => {
 
         <div className="cp-main">
           <header className="cp-chat-header">
-            <h2>{selectedCust ? `Chat with ${selectedCust.name}` : "Select a client"}</h2>
+            <div className="cp-chat-header-inner">
+              <h2>{selectedCust ? `Chat with ${selectedCust.name}` : "Select a client"}</h2>
+              {selectedCust?.customerId && (
+                <button
+                  className="cp-view-profile-btn"
+                  onClick={() => navigate(`/customer/${selectedCust.customerId}`)}
+                >
+                  👤 View Customer
+                </button>
+              )}
+            </div>
           </header>
 
           <div className="cp-messages">

@@ -24,6 +24,7 @@ import CheckoutPage   from './pages/CheckoutPage'
 import ProfilePage    from './pages/ProfilePage'
 import ChatPage       from './pages/ChatPage'
 import ShopChatPage   from './pages/ShopChatPage'
+import CustomerProfilePage from './pages/CustomerProfilePage'
 
 // ── Added by Samee ──
 import CommentPage from "./pages/CommentPage";
@@ -52,7 +53,7 @@ export default function App() {
         <Route path="/shop-profile"    element={<ShopProfile />} />
         <Route path="/shop/:shopId"    element={<ShopPage />} />
 
-        {/* ── Kashpia  */}
+        {/* ── Kaspia  */}
         <Route path="/login"        element={<LoginPage />} />  
         <Route path="/register"     element={<RegisterPage />} />
         <Route path="/c-dashboard"  element={<CDashboard />} />
@@ -61,7 +62,7 @@ export default function App() {
         <Route path="/profile"      element={<ProfilePage />} />
         <Route path="/chat"         element={<ChatPage />} />
         <Route path="/shop-chat"    element={<ShopChatPage />} />
-
+        <Route path="/customer/:customerId" element={<CustomerProfilePage />} />
         {/* ── Samee's Routes ── */}
         <Route path="/magazine"     element={<MagazinePage />} />
         <Route path="/comments/:shopId" element={<CommentPage />} />
