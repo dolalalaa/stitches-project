@@ -142,3 +142,24 @@ button.rec {
 
 .cp-sent-img { max-width: 250px; border-radius: 10px; display: block; margin-bottom: 5px; }
 audio { height: 35px; width: 210px; }
+
+.cp-chat-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cp-view-profile-btn {
+  padding: 8px 14px;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cp-view-profile-btn:hover { background: #6d28d9; }
