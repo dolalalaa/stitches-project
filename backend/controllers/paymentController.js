@@ -2,7 +2,7 @@ const Order = require("../models/Order");
 
 const createPaymentIntent = async (req, res) => {
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-  const { amount, currency, customerName, customerEmail, items } = req.body;
+  const { amount, currency, customerName, customerEmail, items, totalPrice } = req.body;
 
   if (!amount || !currency || !customerName || !customerEmail) {
     return res.status(400).json({ success: false, message: "Missing required fields" });
@@ -18,6 +18,7 @@ const createPaymentIntent = async (req, res) => {
       customerName, customerEmail, amount, currency,
       stripePaymentIntentId: paymentIntent.id,
       status: "pending", items: items || [],
+      totalPrice: totalPrice || amount / 100,
     });
 
     res.status(200).json({ success: true, clientSecret: paymentIntent.client_secret, orderId: order._id });

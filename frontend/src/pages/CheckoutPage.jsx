@@ -5,27 +5,30 @@ import PaymentForm from "../components/PaymentForm";
 import { createPaymentIntent } from "../services/paymentService";
 import "../styles.css";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe("pk_test_51TJrXtFmqPq0E72ilzj6zsqcBo3ViU18ed9Ilf0L2xTpJHP5Uz99Usfj5mBGAccvsiCa5jjdMHwdPCkj4pvm9Fgx0057r2eKHi");
 
-const OrderSummary = ({ items, amount }) => (
+const cartItems = [
+  { productName: "Custom Kurta (Navy Blue)",     quantity: 1, totalPrice: 1200 },
+  { productName: "Tailored Trousers (Charcoal)", quantity: 2, totalPrice: 1800 },
+  { productName: "Embroidered Panjabi",           quantity: 1, totalPrice: 950  },
+];
+const totalAmount = 3950;
+
+const OrderSummary = () => (
   <div className="card">
     <h3 className="card-title">🛍️ Order Summary</h3>
-    {items.length === 0 ? (
-      <p style={{ color: "#999", fontSize: "14px" }}>No orders found.</p>
-    ) : (
-      items.map((item, i) => (
-        <div key={i} className="order-item">
-          <span className="order-item-name">
-            {item.productName || item.name}{" "}
-            <span className="order-item-qty">×{item.quantity}</span>
-          </span>
-          <span className="order-item-price">৳{item.totalPrice || item.price}</span>
-        </div>
-      ))
-    )}
+    {cartItems.map((item, i) => (
+      <div key={i} className="order-item">
+        <span className="order-item-name">
+          {item.productName}{" "}
+          <span className="order-item-qty">×{item.quantity}</span>
+        </span>
+        <span className="order-item-price">৳{item.totalPrice}</span>
+      </div>
+    ))}
     <div className="order-total">
       <span>Total</span>
-      <span className="order-total-amount">৳{amount}</span>
+      <span className="order-total-amount">৳{totalAmount}</span>
     </div>
   </div>
 );
@@ -49,46 +52,32 @@ const ErrorMessage = ({ message, onRetry }) => (
 );
 
 const CheckoutPage = () => {
-  const [clientSecret, setClientSecret]   = useState(null);
-  const [orderId, setOrderId]             = useState(null);
-  const [status, setStatus]               = useState("idle");
-  const [errorMessage, setErrorMessage]   = useState("");
-  const [cartItems, setCartItems]         = useState([]);
-  const [totalAmount, setTotalAmount]     = useState(0);
-  const [customerInfo, setCustomerInfo]   = useState({ name: "", email: "" });
+  const [clientSecret, setClientSecret] = useState(null);
+  const [orderId, setOrderId]           = useState(null);
+  const [status, setStatus]             = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [customerInfo, setCustomerInfo] = useState({ name: "", email: "" });
 
   useEffect(() => {
-    // Get logged-in user info
+    // ✅ Get logged-in user from localStorage
     const stored = localStorage.getItem("stitches_user");
     const user = stored ? JSON.parse(stored) : {};
     setCustomerInfo({ name: user.name || "Customer", email: user.email || "" });
-
-    // Fetch cart from friend's backend (port 1206)
-    const userId = user._id;
-    if (userId) {
-      fetch(`http://localhost:1206/cart?userId=${userId}`)
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.success) {
-            setCartItems(data.cartItems || []);
-            setTotalAmount(data.totalAmount || 0);
-          }
-        })
-        .catch(() => {});
-    }
   }, []);
 
   useEffect(() => {
-    if (totalAmount <= 0) return;
+    if (!customerInfo.name || customerInfo.name === "") return;
+
     const initPayment = async () => {
       setStatus("loading");
       try {
         const data = await createPaymentIntent({
-          amount:        totalAmount * 100, // in paisa
+          amount:        totalAmount * 100,
           currency:      "bdt",
           customerName:  customerInfo.name,
           customerEmail: customerInfo.email,
           items:         cartItems,
+          totalPrice:    totalAmount,
         });
         setClientSecret(data.clientSecret);
         setOrderId(data.orderId);
@@ -98,8 +87,9 @@ const CheckoutPage = () => {
         setStatus("error");
       }
     };
+
     initPayment();
-  }, [totalAmount]);
+  }, [customerInfo]);
 
   const handleSuccess = () => setStatus("success");
   const handleError   = (msg) => { setErrorMessage(msg); setStatus("error"); };
@@ -120,7 +110,7 @@ const CheckoutPage = () => {
 
         <div className="checkout-grid">
           <div className="left-col">
-            <OrderSummary items={cartItems} amount={totalAmount} />
+            <OrderSummary />
             <div className="card">
               <h3 className="card-title">👤 Customer Info</h3>
               <p className="customer-name">{customerInfo.name}</p>
