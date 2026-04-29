@@ -1,24 +1,26 @@
 {
-  "name": "custom-fit-fashion-backend",
+  "name": "stitches-backend",
   "version": "1.0.0",
-  "description": "Backend for Custom-Fit Fashion System with Stripe payments",
-  "main": "server.js",
+  "description": "Backend for Stitches fashion platform",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node index.js",
+    "server": "node server.js",
+    "dev": "nodemon index.js"
   },
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
-    "axios": "^1.15.0",
-    "cloudinary": "^1.41.3",
+    "axios": "^1.15.2",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mongoose": "^7.3.1",
-    "multer": "^2.1.1",
-    "multer-storage-cloudinary": "^4.0.0",
-    "stripe": "^12.12.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.0",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.14",
+    "socket.io": "^4.8.3",
+    "stripe": "^22.1.0"
   }
 }

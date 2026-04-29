@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MagazineCard from "../components/MagazineCard";
-import Sidebar from "../components/Sidebar";
+import Sidebar_samee from "../components/Sidebar_samee";
 
 export default function MagazinePage() {
 
@@ -39,7 +39,7 @@ export default function MagazinePage() {
         ))}
       </div>
 
-      <Sidebar />
+      <Sidebar_samee />
 
     </div>
   );
@@ -47,7 +47,8 @@ export default function MagazinePage() {
 
 const styles = {
   container: {
-    display: "flex"
+    display: "flex",
+    gap: "20px"
   },
   grid: {
     width: "75%",

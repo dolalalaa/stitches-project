@@ -1,0 +1,57 @@
+# Terminal 1 — Kaspia's backend
+cd backend && node server.js
+# ✅ port 5000
+
+# Terminal 2 — Your backend  
+cd backend && node index.js
+# ✅ port 1206
+
+# Terminal 3 — Frontend
+cd frontend && npm run dev
+# ✅ port 5173
+
+# Terminal 4 — Mannequin
+cd mannequin-service && source venv/bin/activate && python app.py
+# ✅ port 5001
+
+run backend:
+cd stitches-project/stitches-backend
+npm install
+npm run dev
+
+run frontend:
+cd stitches-project/stitches-frontend
+npm run dev
+
+run mannequin:
+cd stitches-project/mannequin-service
+pip install -r requirements.txt
+python app.py
+
+
+add products:
+curl -X POST http://localhost:1206/product/create \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"Lavender Chikankari Kurti\",\"type\":\"Customized\",\"stock\":7,\"price\":7149,\"image\":\"YOUR_POSTIMAGES_LINK_HERE\"}"
+
+
+delete product:
+curl -X DELETE http://localhost:1206/product/FIRST_ID_HERE
+
+
+run url to generate mannequin:
+http://localhost:5173/mannequin?shoulder=80&chest=90&waist=70&hip=95&armLength=50
+
+
+run on terminal for mannequin:
+cd stitches-project/mannequin-service
+source venv/bin/activate
+python app.py
+
+
+create venv, install dependencies:
+python3 -m venv venv
+pip install -r requirements.txt
+
+
+

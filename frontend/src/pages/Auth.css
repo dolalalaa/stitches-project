@@ -1,0 +1,117 @@
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: #7C3AED; /* Purple theme */
+  letter-spacing: -1px;
+}
+
+.brand-icon {
+  font-size: 28px;
+  transform: rotate(-15deg); /* Tilts the scissors for style */
+  display: inline-block;
+}
+
+.brand-text {
+  text-transform: uppercase;
+}.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f3f4f6;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.auth-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-card h2 {
+  color: #7C3AED;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.auth-card p {
+  text-align: center;
+  color: #6B7280;
+  margin-bottom: 25px;
+}
+
+.auth-group {
+  margin-bottom: 15px;
+}
+
+.auth-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.auth-group input, .auth-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  outline: none;
+}
+
+.auth-group input:focus {
+  border-color: #7C3AED;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background: #7C3AED;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.auth-toggle span {
+  color: #7C3AED;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 24px;
+  color: #7C3AED;
+}
+
+.brand-icon {
+  font-size: 28px;
+  transform: rotate(-15deg);
+  display: inline-block;
+}

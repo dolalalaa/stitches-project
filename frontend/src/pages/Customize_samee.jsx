@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// IMPORT THE 3D VIEWER COMPONENT
+import ModularMannequinViewer from '../components/Modular_mannequin_viewer';
 
 const Customize_samee = () => {
     const location = useLocation();
@@ -32,11 +34,14 @@ const Customize_samee = () => {
     const loadData = async (fabricData, measurementData) => {
         try {
             setLoading(true);
+            console.log("Loading for size:", measurementData.size);
             
             const mannequinRes = await axios.get(`${API_URL}/api/mannequin/${measurementData.size}`);
+            console.log("Mannequin loaded:", mannequinRes.data);
             setMannequin(mannequinRes.data);
             
             const kurtasRes = await axios.get(`${API_URL}/api/kurtas/${measurementData.size}`);
+            console.log("Kurtas loaded:", kurtasRes.data);
             setKurtas(kurtasRes.data);
             if (kurtasRes.data.length > 0) {
                 setSelectedKurta(kurtasRes.data[0]);
@@ -45,9 +50,11 @@ const Customize_samee = () => {
             
             const sleevesRes = await axios.get(`${API_URL}/api/sleeves/${measurementData.size}`);
             setSleeves(sleevesRes.data);
+            if (sleevesRes.data.length > 0) setSelectedSleeve(sleevesRes.data[0]);
             
             const necksRes = await axios.get(`${API_URL}/api/necks/${measurementData.size}`);
             setNecks(necksRes.data);
+            if (necksRes.data.length > 0) setSelectedNeck(necksRes.data[0]);
             
             setLoading(false);
         } catch (error) {
@@ -65,7 +72,6 @@ const Customize_samee = () => {
         }
     };
     
-    // Simple Save Draft - Just navigate
     const handleSaveDraft = () => {
         navigate('/drafts', {
             state: {
@@ -79,7 +85,6 @@ const Customize_samee = () => {
         });
     };
     
-    // Simple Confirm Order - Just navigate
     const handleConfirmOrder = () => {
         if (!selectedKurta) {
             alert('Please select a kurta first');
@@ -98,6 +103,18 @@ const Customize_samee = () => {
         });
     };
     
+    // Build URLs for the 3D viewer
+    const viewerUrls = {
+        mannequin: mannequin?.glbFile,
+        kurta: selectedKurta?.glbFile,
+        sleeve: selectedSleeve?.glbFile,
+        neck: selectedNeck?.glbFile,
+        lace: selectedLace?.glbFile,
+        fabricTexture: fabric?.image
+    };
+    
+    console.log("Viewer URLs:", viewerUrls);
+    
     if (loading) {
         return (
             <div style={styles.loading}>
@@ -114,15 +131,20 @@ const Customize_samee = () => {
             </div>
             
             <div style={styles.main}>
-                {/* 3D Viewer */}
+                {/* 3D Viewer - REPLACED PLACEHOLDER WITH ACTUAL VIEWER */}
                 <div style={styles.viewer}>
-                    <div style={styles.viewerPlaceholder}>
-                        <h3>3D Preview</h3>
-                        <p>Kurta: {selectedKurta?.displayName || 'None'}</p>
-                        <p>Sleeve: {selectedSleeve?.name || 'None'}</p>
-                        <p>Neck: {selectedNeck?.name || 'None'}</p>
-                        <p>Lace: {selectedLace?.name || 'None'}</p>
-                    </div>
+                    {viewerUrls.mannequin ? (
+                        <ModularMannequinViewer urls={viewerUrls} />
+                    ) : (
+                        <div style={styles.viewerPlaceholder}>
+                            <h3>3D Preview</h3>
+                            <p>No mannequin found for size: {measurement?.size}</p>
+                            <p>Kurta: {selectedKurta?.displayName || 'None'}</p>
+                            <p>Sleeve: {selectedSleeve?.name || 'None'}</p>
+                            <p>Neck: {selectedNeck?.name || 'None'}</p>
+                            <p>Lace: {selectedLace?.name || 'None'}</p>
+                        </div>
+                    )}
                 </div>
                 
                 {/* Controls */}

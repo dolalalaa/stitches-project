@@ -71,7 +71,12 @@ export default function FabricPage() {
 
             <button
               style={styles.btn}
-              onClick={() => navigate("/size", { state: { fabric: f } })}
+              onClick={() => {
+                // ========== ONLY 1 LINE ADDED HERE ==========
+                localStorage.setItem("selectedFabric", JSON.stringify(f));
+                // ============================================
+                navigate("/measurements", { state: { fabric: f } });
+              }}
             >
               Select Fabric
             </button>

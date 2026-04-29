@@ -7,8 +7,8 @@ import { createPaymentIntent } from "../services/paymentService";
 import "../styles.css";
 
 
-console.log("Stripe public key:", process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+console.log("Stripe public key:", import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const ORDER = {
   customerName: "Rahim Hossain",
