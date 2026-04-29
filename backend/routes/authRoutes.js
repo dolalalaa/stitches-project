@@ -66,8 +66,9 @@ router.post('/register', async (req, res) => {
       }
     }
 
+    // ✅ name is now included in the token payload
     const token = jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
+      { _id: user._id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET || 'stitches_secret',
       { expiresIn: '7d' }
     );
@@ -98,8 +99,9 @@ router.post('/login', async (req, res) => {
     if (!valid)
       return res.status(401).json({ message: 'Incorrect password.' });
 
+    // ✅ name is now included in the token payload
     const token = jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
+      { _id: user._id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET || 'stitches_secret',
       { expiresIn: '7d' }
     );

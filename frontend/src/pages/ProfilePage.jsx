@@ -19,14 +19,37 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        // Pre-fill from localStorage first
+        const stored = localStorage.getItem("stitches_user");
+        const localUser = stored ? JSON.parse(stored) : {};
+
         const token = localStorage.getItem("token");
         const res = await fetch("http://localhost:5000/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        if (data.success) setProfile(data.data);
+
+        if (data.success) {
+          setProfile({
+            ...data.data,
+            name:  data.data.name  || localUser.name  || "",
+            email: data.data.email || localUser.email || "",
+          });
+        } else {
+          setProfile((prev) => ({
+            ...prev,
+            name:  localUser.name  || "",
+            email: localUser.email || "",
+          }));
+        }
       } catch (err) {
-        console.error("Profile load error:", err);
+        const stored = localStorage.getItem("stitches_user");
+        const localUser = stored ? JSON.parse(stored) : {};
+        setProfile((prev) => ({
+          ...prev,
+          name:  localUser.name  || "",
+          email: localUser.email || "",
+        }));
       }
     };
 

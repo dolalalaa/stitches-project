@@ -1,4 +1,3 @@
-// frontend/pages/ChatPage.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import Sidebar from "../components/Sidebar";
@@ -6,21 +5,33 @@ import "./ChatPage.css";
 
 const socket = io("http://localhost:5000");
 
-const SHOP_OWNERS = [
-  { id: "shop_owner_1", name: "Classic Tailors" },
-  { id: "shop_owner_2", name: "Modern Stitches" },
-];
-
 const ChatPage = () => {
-  const customerName = localStorage.getItem("customerName") || "Customer";
-  const [selectedOwner, setSelectedOwner] = useState(SHOP_OWNERS[0]);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const stored = localStorage.getItem("stitches_user");
+  const user = stored ? JSON.parse(stored) : {};
+  const customerName = user.name || localStorage.getItem("customerName") || "Customer";
 
-  const messagesEndRef = useRef(null);
+  const [shopOwners, setShopOwners]       = useState([]);
+  const [selectedOwner, setSelectedOwner] = useState(null);
+  const [messages, setMessages]           = useState([]);
+  const [input, setInput]                 = useState("");
+  const messagesEndRef                    = useRef(null);
+
+  // Fetch real shop owners from DB
+  useEffect(() => {
+    fetch("http://localhost:5000/api/chat/shops/" + customerName)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success && data.shops?.length > 0) {
+          setShopOwners(data.shops);
+          setSelectedOwner(data.shops[0]);
+        }
+      })
+      .catch(() => {});
+  }, [customerName]);
 
   useEffect(() => {
-    const room = `${customerName}_${selectedOwner.id}`;
+    if (!selectedOwner) return;
+    const room = `${customerName}_${selectedOwner.name}`;
     socket.emit("join_room", room);
     socket.emit("load_messages", room);
 
@@ -33,16 +44,18 @@ const ChatPage = () => {
     };
   }, [selectedOwner, customerName]);
 
-  useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), [messages]);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendMsg = (data) => {
-    const room = `${customerName}_${selectedOwner.id}`;
-    const payload = { 
-        ...data, 
-        room, 
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) 
-    };
-    socket.emit("send_message", payload);
+    if (!selectedOwner) return;
+    const room = `${customerName}_${selectedOwner.name}`;
+    socket.emit("send_message", {
+      ...data,
+      room,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    });
   };
 
   const handleImage = (e) => {
@@ -61,36 +74,58 @@ const ChatPage = () => {
         <div className="cp-layout">
           <div className="cp-owners">
             <p className="cp-owners-label">Shop Owners</p>
-            {SHOP_OWNERS.map((o) => (
-              <div key={o.id} className={`cp-owner-item ${selectedOwner.id === o.id ? "active" : ""}`} onClick={() => setSelectedOwner(o)}>
-                {o.name}
-              </div>
-            ))}
+            {shopOwners.length === 0 ? (
+              <p style={{ color: "#999", fontSize: "13px", padding: "10px" }}>
+                No chats yet
+              </p>
+            ) : (
+              shopOwners.map((o) => (
+                <div
+                  key={o.id}
+                  className={`cp-owner-item ${selectedOwner?.id === o.id ? "active" : ""}`}
+                  onClick={() => setSelectedOwner(o)}
+                >
+                  {o.name}
+                </div>
+              ))
+            )}
           </div>
+
           <div className="cp-chat-window">
-            <header className="cp-chat-header"><h2>Chat with {selectedOwner.name}</h2></header>
+            <header className="cp-chat-header">
+              <h2>{selectedOwner ? `Chat with ${selectedOwner.name}` : "Select a shop"}</h2>
+            </header>
+
             <div className="cp-messages">
               {messages.map((msg, i) => (
                 <div key={i} className={`cp-msg-wrap ${msg.sender === customerName ? "me" : "them"}`}>
                   <div className="cp-bubble">
                     {msg.image && <img src={msg.image} alt="pic" className="cp-sent-img" />}
-                    {msg.text && <p>{msg.text}</p>}
+                    {msg.text  && <p>{msg.text}</p>}
                     <span className="cp-time">{msg.time}</span>
                   </div>
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
+
             <div className="cp-input-area">
-              <input type="file" id="imgInp" style={{display:"none"}} onChange={handleImage} />
+              <input type="file" id="imgInp" style={{ display: "none" }} onChange={handleImage} />
               <button className="cp-action-btn" onClick={() => document.getElementById("imgInp").click()}>🖼️</button>
-              <input 
-                value={input} 
-                onChange={(e)=>setInput(e.target.value)} 
-                placeholder="Type your message..." 
-                onKeyPress={(e)=>e.key==="Enter" && input.trim() && (sendMsg({sender:customerName, text:input}), setInput(""))} 
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your message..."
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && input.trim()) {
+                    sendMsg({ sender: customerName, text: input });
+                    setInput("");
+                  }
+                }}
               />
-              <button className="cp-action-btn" onClick={() => { if(input.trim()){sendMsg({sender:customerName, text:input}); setInput("");} }}>➡️</button>
+              <button className="cp-action-btn" onClick={() => {
+                if (input.trim()) { sendMsg({ sender: customerName, text: input }); setInput(""); }
+              }}>➡️</button>
             </div>
           </div>
         </div>
