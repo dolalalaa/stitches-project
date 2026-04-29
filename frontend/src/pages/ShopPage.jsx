@@ -48,13 +48,15 @@ export default function ShopPage() {
             <h1 className="shop-name">{shop.shopName}</h1>
             <p className="shop-owner">by {shop.ownerName}</p>
             {shop.address && <p className="shop-address">📍 {shop.address}</p>}
+             
+
           </div>
         </div>
 
         {/* Ratings */}
         <div className="shop-ratings">
           <p className="shop-rating-label">Customer Ratings</p>
-          <p className="shop-rating-empty">No ratings yet</p>
+          <Link to={`/comments/${shopId}`} className="shop-rating-empty">Write a review →</Link>
         </div>
       </div>
 

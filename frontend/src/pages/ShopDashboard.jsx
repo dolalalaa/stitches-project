@@ -251,7 +251,7 @@ export default function ShopDashboard() {
           <div className="products-tab-header">
             <p className="products-tab-count">{products.length} product{products.length !== 1 ? 's' : ''}</p>
             <div className="products-tab-actions">
-              <button className="btn btn-outline" onClick={() => navigate('/fabrics')}>
+              <button className="btn btn-outline" onClick={() => navigate('/add-fabric')}>
                 + Add Fabric
               </button>
               <button className="btn btn-plum" onClick={() => setShowAddForm(v => !v)}>

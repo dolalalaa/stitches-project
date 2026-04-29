@@ -29,7 +29,7 @@ import ShopChatPage   from './pages/ShopChatPage'
 import CommentPage from "./pages/CommentPage";
 import MagazinePage from "./pages/MagazinePage";
 import FabricPage from "./pages/FabricPage";
-
+import AddFabric from './pages/AddFabric';
 import Customize_samee from "./pages/Customize_samee";
 
 export default function App() {
@@ -66,7 +66,7 @@ export default function App() {
         <Route path="/magazine"     element={<MagazinePage />} />
         <Route path="/comments/:shopId" element={<CommentPage />} />
         <Route path="/fabrics"      element={<FabricPage />} />
-       
+        <Route path="/add-fabric" element={<AddFabric />} />
         <Route path="/customize"    element={<Customize_samee />} />
         
       </Routes>

@@ -4,7 +4,7 @@ const FabricSchema = new mongoose.Schema({
   name: { type: String, required: true },
 
   // EXISTING (old)
-  textureUrl: { type: String, required: true },
+  textureUrl: { type: String, required: false },
   thumbnailColor: { type: String, required: true },
   category: { type: String },
 
@@ -13,7 +13,9 @@ const FabricSchema = new mongoose.Schema({
   color: { type: String },
   pattern: { type: String },
   price: { type: Number },
-  image: { type: String }       // Cloudinary preview image
+  image: { type: String },      // Cloudinary preview image
+
+  shopOwnerId: { type: String, default: null }
 });
 
 module.exports = mongoose.model('Fabric', FabricSchema);
